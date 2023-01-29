@@ -13,11 +13,8 @@
   "files": [
     "lib"
   ],
-  "publishConfig": {
-    "registry": "https://registry.npmmirror.com/"
-  },
   "scripts": {
     "test": "node ./__tests__/core.test.js"
   },
-  "gitHead": "1fb914a556cc2643df72df03eca2e1c9d227282f"
+  "gitHead": "b4fd1fb741cf1b5b84154a1460e789bebeafcb92"
 }
