@@ -1,11 +1,14 @@
 {
   "name": "@xy-flow/core",
-  "version": "0.0.5",
+  "version": "0.0.0",
   "description": "> TODO: description",
   "author": "guoxinyuan <inky.gxy@gmail.com>",
   "homepage": "",
   "license": "ISC",
   "main": "lib/core.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -15,6 +18,5 @@
   ],
   "scripts": {
     "test": "node ./__tests__/core.test.js"
-  },
-  "gitHead": "c4d59e3d992bcc7f86a0168f06a619e4199fd0cb"
+  }
 }
