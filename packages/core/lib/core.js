@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 module.exports = core;
 
 function core() {
-    return "Hello from core";
+  return "Hello from core 111";
 }
