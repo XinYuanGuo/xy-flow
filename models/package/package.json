@@ -31,6 +31,7 @@
     "@xy-flow/get-npm-info": "^0.0.2",
     "fs-extra": "^11.1.0",
     "npminstall": "^7.4.1",
-    "path-exists": "^5.0.0"
+    "path-exists": "^5.0.0",
+    "pkg-dir": "^7.0.0"
   }
 }

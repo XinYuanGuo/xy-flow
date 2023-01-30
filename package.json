@@ -8,12 +8,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "guoxinyuan <guoxy@flatincbr.com>",
   "license": "ISC",
   "workspaces": [
     "core/*",
     "models/*",
     "commands/*",
     "utils/*"
-  ]
+  ],
+  "repository": "https://github.com/XinYuanGuo/xy-flow.git"
 }
