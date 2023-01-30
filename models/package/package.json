@@ -1,0 +1,36 @@
+{
+  "name": "@xy-flow/package",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": "guoxinyuan <guoxy@flatincbr.com>",
+  "homepage": "https://github.com/XinYuanGuo/xy-flow#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XinYuanGuo/xy-flow.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/@xy-flow/package.test.js"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/XinYuanGuo/xy-flow/issues"
+  },
+  "dependencies": {
+    "@xy-flow/get-npm-info": "^0.0.1",
+    "fs-extra": "^11.1.0",
+    "npminstall": "^7.4.1",
+    "path-exists": "^5.0.0"
+  }
+}

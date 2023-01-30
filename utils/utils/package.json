@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "> TODO: description",
   "author": "guoxinyuan <guoxy@flatincbr.com>",
-  "homepage": "",
+  "homepage": "https://github.com/XinYuanGuo/xy-flow#readme",
   "license": "ISC",
   "main": "lib/utils.js",
   "publishConfig": {
@@ -16,7 +16,14 @@
   "files": [
     "lib"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XinYuanGuo/xy-flow.git"
+  },
   "scripts": {
     "test": "node ./__tests__/utils.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/XinYuanGuo/xy-flow/issues"
   }
 }
