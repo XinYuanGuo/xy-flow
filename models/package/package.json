@@ -1,6 +1,6 @@
 {
   "name": "@xy-flow/package",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "> TODO: description",
   "author": "guoxinyuan <guoxy@flatincbr.com>",
   "homepage": "https://github.com/XinYuanGuo/xy-flow#readme",
@@ -28,8 +28,8 @@
     "url": "https://github.com/XinYuanGuo/xy-flow/issues"
   },
   "dependencies": {
-    "@xy-flow/get-npm-info": "^0.0.2",
-    "@xy-flow/utils": "^0.0.2",
+    "@xy-flow/get-npm-info": "^0.0.3",
+    "@xy-flow/utils": "^0.0.3",
     "fs-extra": "^11.1.0",
     "npminstall": "^7.4.1",
     "path-exists": "^5.0.0",
