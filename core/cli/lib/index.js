@@ -6,7 +6,7 @@ import { Command } from "commander";
 import dotEnv from "dotenv";
 import { createRequire } from "module";
 import path from "path";
-import { pathExistsSync } from "path-exists";
+import pathExists from "path-exists";
 import rootCheck from "root-check";
 import semver from "semver";
 import userHome from "user-home";
@@ -49,14 +49,14 @@ function checkRoot() {
 
 function checkUserHome() {
   log.verbose("cli", "检查用户主目录");
-  if (!userHome || !pathExistsSync(userHome)) {
+  if (!userHome || !pathExists.sync(userHome)) {
     throw new Error(`当前用户主目录不存在! 检查目录为: ${userHome}`);
   }
 }
 
 function checkEnv() {
   const dotEnvPath = path.resolve(userHome, DEFAULT_CLI_HOME, ".env");
-  if (pathExistsSync(dotEnvPath)) {
+  if (pathExists.sync(dotEnvPath)) {
     dotEnv.config({
       path: dotEnvPath,
     });

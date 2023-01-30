@@ -1,15 +1,12 @@
 {
-  "name": "@xy-flow/utils",
+  "name": "@xy-flow/feature-finish",
   "version": "0.0.2",
   "description": "> TODO: description",
   "author": "guoxinyuan <guoxy@flatincbr.com>",
   "homepage": "https://github.com/XinYuanGuo/xy-flow#readme",
   "license": "ISC",
-  "main": "lib/utils.js",
+  "main": "lib/index.js",
   "type": "module",
-  "publishConfig": {
-    "access": "public"
-  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -17,12 +14,15 @@
   "files": [
     "lib"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/XinYuanGuo/xy-flow.git"
   },
   "scripts": {
-    "test": "node ./__tests__/utils.test.js"
+    "test": "node ./__tests__/@xy-flow/feature-finish.test.js"
   },
   "bugs": {
     "url": "https://github.com/XinYuanGuo/xy-flow/issues"

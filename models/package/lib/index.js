@@ -1,8 +1,12 @@
-import { getNpmLatestVersion } from "@xy-flow/get-npm-info";
+import { getDefaultRegistry, getNpmLatestVersion } from "@xy-flow/get-npm-info";
+import { formatPath } from "@xy-flow/utils";
 import fse from "fs-extra";
+import { createRequire } from "module";
+import npmInstall from "npminstall";
 import path from "path";
-import { pathExistsSync } from "path-exists";
+import pathExists from "path-exists";
 import pkgDir from "pkg-dir";
+const require = createRequire(import.meta.url);
 
 export default class Package {
   constructor(
@@ -16,11 +20,11 @@ export default class Package {
     this.storePath = options.storePath;
     this.packageName = options.packageName;
     this.packageVersion = options.packageVersion;
-    this.cacheFilePathPrefix = this.packageName.replace("/", "_");
+    this.cacheFilePathPrefix = this.packageName.replace("/", "+");
   }
 
   async prepare() {
-    if (this.storePath && !pathExistsSync(this.storePath)) {
+    if (this.storePath && !pathExists.sync(this.storePath)) {
       fse.mkdirpSync(this.storePath);
     }
     if (this.packageVersion === "latest") {
@@ -31,16 +35,49 @@ export default class Package {
   async exists() {
     if (this.storePath) {
       await this.prepare();
-      return pathExistsSync(this.cacheFilePath);
+      return pathExists.sync(this.cacheFilePath);
     } else {
-      return pathExistsSync(this.targetPath);
+      return pathExists.sync(this.targetPath);
     }
   }
   async install() {
     await this.prepare();
-    debugger;
+    return npmInstall({
+      root: this.targetPath,
+      storeDir: this.storePath,
+      registry: getDefaultRegistry(),
+      pkgs: [
+        {
+          name: this.packageName,
+          version: this.packageVersion,
+        },
+      ],
+    });
   }
-  async update() {}
+  async update() {
+    await this.prepare();
+    // 1. 获取最新的npm模块版本号
+    const latestPackageVersion = await getNpmLatestVersion(this.packageName);
+    // 2. 查询最新版本号对应的路径是否存在
+    const latestFilePath = this.getSpecificCacheFilePath(latestPackageVersion);
+    // 3. 如果不存在，则直接安装最新版本
+    if (!pathExists.sync(latestFilePath)) {
+      await npmInstall({
+        root: this.targetPath,
+        storeDir: this.storePath,
+        registry: getDefaultRegistry(),
+        pkgs: [
+          {
+            name: this.packageName,
+            version: latestPackageVersion,
+          },
+        ],
+      });
+      this.packageVersion = latestPackageVersion;
+    } else {
+      this.packageVersion = latestPackageVersion;
+    }
+  }
 
   getRootFilePath() {
     function _getRootFile(targetPath) {
@@ -57,24 +94,18 @@ export default class Package {
       }
       return null;
     }
-    if (this.storeDir) {
-      return _getRootFile(this.cacheFilePath);
+    if (this.storePath) {
+      return _getRootFile(this.getCacheFilePath());
     } else {
       return _getRootFile(this.targetPath);
     }
   }
 
-  getSpecificCacheFilePath(packageVersion) {
-    return path.resolve(
-      this.storeDir,
-      `_${this.cacheFilePathPrefix}@${packageVersion}@${this.packageName}`
-    );
-  }
-
-  get cacheFilePath() {
+  getCacheFilePath(packageVersion = this.packageVersion) {
     return path.resolve(
       this.storePath,
-      `_${this.cacheFilePathPrefix}@${this.packageName}`
+      ".store",
+      `${this.cacheFilePathPrefix}@${packageVersion}`
     );
   }
 }

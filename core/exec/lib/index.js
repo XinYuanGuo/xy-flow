@@ -52,8 +52,11 @@ export default async function exec() {
       require(rootFile).apply(null, arguments);
     }
   } catch (error) {
-    log.error("exec", error.message);
-    console.log(`Request Fail URL: ${error.config.url}`);
+    log.verbose("exec", error);
+    log.error("exec", error?.message);
+    if (error?.config?.url) {
+      console.log(`Request Fail URL: ${error.config.url}`);
+    }
   }
 }
 

@@ -1,7 +1,13 @@
-'use strict';
+import path from "path";
 
-module.exports = utils;
-
-function utils() {
-    return "Hello from utils";
+export function formatPath(p) {
+  if (p && typeof p === "string") {
+    const sep = path.sep;
+    if (sep === "/") {
+      return p;
+    } else {
+      return p.replace(/\\/g, "/");
+    }
+  }
+  return p;
 }

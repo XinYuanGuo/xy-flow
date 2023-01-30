@@ -6,12 +6,16 @@ export async function getNpmInfo(npmName) {
   if (!npmName) {
     return null;
   }
-  const registry = "https://registry.npmjs.org";
+  const registry = getDefaultRegistry();
   const npmInfoUrl = urlJoin(registry, npmName);
   const res = await axios.get(npmInfoUrl);
   if (res.status === 200) {
     return res.data;
   }
+}
+
+export function getDefaultRegistry() {
+  return "https://registry.npmjs.org";
 }
 
 async function getNpmVersions(npmName) {
