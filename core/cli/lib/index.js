@@ -95,7 +95,8 @@ function registerCommand() {
     .name(Object.keys(pkg.bin)[0])
     .usage("<command> [option]")
     .version(pkg.version, "-v, --version")
-    .option("-d, --debug", "是否开启调试模式", false);
+    .option("-d, --debug", "是否开启调试模式", false)
+    .option("-tp, --targetPath", "本地开发使用", false);
 
   const featureCommand = registerFeatureCommand();
 
@@ -109,6 +110,11 @@ function registerCommand() {
     }
     log.level = process.env.LOG_LEVEL;
     log.verbose("log level", "开启调试模式");
+  });
+
+  program.on("option:targetPath", () => {
+    console.log("targetPath", process.cwd());
+    process.env.CLI_TARGET_PATH = process.cwd();
   });
 
   program.on("command:*", (cmdObj) => {
@@ -133,6 +139,12 @@ function registerFeatureCommand() {
     .usage("<command> [option]")
     .description("拉取最新的主干分支并从主干分支创建新的功能分支")
     .action(exec);
+  feature
+    .command("finish")
+    .usage("<command> [option]")
+    .description("开发结束,检测测试分支并合入")
+    .action(exec);
+
   return feature;
 }
 

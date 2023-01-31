@@ -5,7 +5,6 @@ import { createRequire } from "module";
 import npmInstall from "npminstall";
 import path from "path";
 import pathExists from "path-exists";
-import pkgDir from "pkg-dir";
 const require = createRequire(import.meta.url);
 
 export default class Package {
@@ -81,24 +80,13 @@ export default class Package {
 
   getRootFilePath() {
     function _getRootFile(targetPath) {
-      // 1. 获取package.json所在目录
-      const dir = pkgDir.sync(targetPath);
-      if (dir) {
-        // 2. 读取package.json
-        const pkgFile = require(path.resolve(dir, "package.json"));
-        // 3. 寻找main/lib
-        if (pkgFile && pkgFile.main) {
-          // 4. 路径的兼容(macOS/windows)
-          return formatPath(path.resolve(dir, pkgFile.main));
-        }
+      const pkgFile = require(path.resolve(targetPath, "package.json"));
+      if (pkgFile && pkgFile.main) {
+        return formatPath(path.resolve(targetPath, pkgFile.main));
       }
       return null;
     }
-    if (this.storePath) {
-      return _getRootFile(this.getCacheFilePath());
-    } else {
-      return _getRootFile(this.targetPath);
-    }
+    return _getRootFile(this.getRootPath());
   }
 
   getCacheFilePath(packageVersion = this.packageVersion) {
@@ -107,5 +95,19 @@ export default class Package {
       ".store",
       `${this.cacheFilePathPrefix}@${packageVersion}`
     );
+  }
+
+  getRootPath() {
+    let targetPath = "";
+    if (this.storePath) {
+      targetPath = path.resolve(
+        this.storePath,
+        ".store",
+        `${this.cacheFilePathPrefix}@${packageVersion}`
+      );
+    } else {
+      targetPath = this.targetPath;
+    }
+    return `${targetPath}/node_modules/${this.packageName}`;
   }
 }

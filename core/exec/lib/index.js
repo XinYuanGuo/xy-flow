@@ -1,11 +1,10 @@
 import log from "@xy-flow/log";
 import Package from "@xy-flow/package";
-import { createRequire } from "module";
 import path from "path";
-const require = createRequire(import.meta.url);
 
 const SETTINGS = {
   "xy-flow-feature-start": "@xy-flow/feature-start",
+  "xy-flow-feature-finish": "@xy-flow/feature-finish",
 };
 const CACHE_DIR = "dependencies";
 
@@ -49,7 +48,8 @@ export default async function exec() {
 
     const rootFile = pkg.getRootFilePath();
     if (rootFile) {
-      require(rootFile).apply(null, arguments);
+      const command = await import(rootFile);
+      command.default(arguments);
     }
   } catch (error) {
     log.verbose("exec", error);
