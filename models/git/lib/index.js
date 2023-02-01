@@ -28,7 +28,8 @@ export default class Git {
     openBrowser(`${this.remoteUrl}/compare/master...master`);
   }
 
-  async checkBranchNameIsRepeat(newBranchName) {
+  async checkBranchNameIsExist(newBranchName) {
+    await this.git.fetch(["--all"]);
     const branchList = await this.git.branch(["-a"]);
     for (let i = 0; i < branchList.all.length; i++) {
       const branchName = branchList.all[i];
@@ -40,5 +41,18 @@ export default class Git {
       }
     }
     return false;
+  }
+
+  async pullBranch(branchName) {
+    const isExist = await this.checkBranchNameIsExist(branchName);
+    if (isExist) {
+      if ((await this.git.branch(["-a"])).current === branchName) {
+        await this.git.pull(["-r"]);
+      } else {
+        // 在同分支进行fetch
+        await this.git.fetch(["origin", `${branchName}:${branchName}`]);
+      }
+      log.success("pull branch", `拉取${branchName}成功`);
+    }
   }
 }

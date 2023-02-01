@@ -1,3 +1,4 @@
+import Git from "@xy-flow/git";
 import log from "@xy-flow/log";
 import fse from "fs-extra";
 import path from "path";
@@ -43,14 +44,40 @@ export default class Command {
     log.verbose("Command initArgs", this._cmd, this._argv);
   }
 
-  init() {
+  async init() {
+    await this.initGit();
+    await this.getGitConfig();
+    await this.checkoutMainBranchExist();
+  }
+
+  async initGit() {
+    this.gitCls = new Git();
+    await this.gitCls.prepare();
+  }
+
+  async getGitConfig() {
+    const gitRemoteRepoUrl = this.gitCls.remoteUrl;
     const homePath = process.env.CLI_HOME_PATH;
-    if (homePath) {
+    if (homePath && gitRemoteRepoUrl) {
       this.configPath = path.resolve(homePath, "config.json");
       if (fse.existsSync(this.configPath)) {
         this.allGitConfig = JSON.parse(fse.readFileSync(this.configPath));
-      } else {
-        this.allGitConfig = {};
+        this.gitConfig = this.allGitConfig[gitRemoteRepoUrl];
+        log.verbose("command gitConfig", this.gitConfig);
+      }
+    }
+    if (!this.gitConfig && this._cmd.name() !== "init") {
+      throw new Error("xy-flow还未初始化, 请先运行 xy-flow init");
+    }
+  }
+
+  async checkoutMainBranchExist() {
+    if (this._cmd.name() !== "init") {
+      const isExist = await this.gitCls.checkBranchNameIsExist(
+        this.gitConfig.mainBranch
+      );
+      if (!isExist) {
+        throw new Error("未检测到主干分支, 请先创建主干分支");
       }
     }
   }

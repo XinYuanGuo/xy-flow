@@ -1,5 +1,4 @@
 import Command from "@xy-flow/command";
-import Git from "@xy-flow/git";
 import log from "@xy-flow/log";
 import fse from "fs-extra";
 import inquirer from "inquirer";
@@ -10,9 +9,7 @@ export class InitCommand extends Command {
   }
 
   async exec() {
-    let git = new Git();
     try {
-      await git.prepare();
       const projectGitSettings = await inquirer.prompt([
         {
           type: "input",
@@ -27,12 +24,15 @@ export class InitCommand extends Command {
           default: "release/dev",
         },
       ]);
-      this.config = {
+      const allGitConfig = {
         ...this.allGitConfig,
         [git.remoteUrl]: projectGitSettings,
       };
       await fse.outputFile(this.configPath, JSON.stringify(this.config, {}, 2));
       log.success("init command", "初始化配置成功");
+      if (!(await this.gitCls.checkBranchNameIsExist(this.gitConfig))) {
+        log.warn("init", "当前不存在主干分支, 请设置主干分支并推送到远端");
+      }
     } catch (error) {
       log.error("init command", error.message);
       log.verbose("init command", error);
