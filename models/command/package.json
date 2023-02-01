@@ -28,6 +28,8 @@
     "url": "https://github.com/XinYuanGuo/xy-flow/issues"
   },
   "dependencies": {
-    "@xy-flow/log": "^0.0.4"
+    "@xy-flow/log": "^0.0.4",
+    "fs-extra": "^11.1.0",
+    "semver": "^7.3.8"
   }
 }

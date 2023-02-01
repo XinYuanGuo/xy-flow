@@ -5,6 +5,7 @@ import path from "path";
 const SETTINGS = {
   "xy-flow-feature-start": "@xy-flow/feature-start",
   "xy-flow-feature-finish": "@xy-flow/feature-finish",
+  "xy-flow-init": "@xy-flow/init",
 };
 const CACHE_DIR = "dependencies";
 
@@ -48,8 +49,12 @@ export default async function exec() {
 
     const rootFile = pkg.getRootFilePath();
     if (rootFile) {
-      const command = await import(rootFile);
-      command.default(arguments);
+      try {
+        const command = await import(rootFile);
+        command.default(Array.from(arguments));
+      } catch (error) {
+        log.error("exec", error.message);
+      }
     }
   } catch (error) {
     log.verbose("exec", error);

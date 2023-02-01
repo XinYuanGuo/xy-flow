@@ -6,7 +6,7 @@ import { Command } from "commander";
 import dotEnv from "dotenv";
 import { createRequire } from "module";
 import path from "path";
-import pathExists from "path-exists";
+import { pathExistsSync } from "path-exists";
 import rootCheck from "root-check";
 import semver from "semver";
 import userHome from "user-home";
@@ -49,14 +49,14 @@ function checkRoot() {
 
 function checkUserHome() {
   log.verbose("cli", "检查用户主目录");
-  if (!userHome || !pathExists.sync(userHome)) {
+  if (!userHome || !pathExistsSync(userHome)) {
     throw new Error(`当前用户主目录不存在! 检查目录为: ${userHome}`);
   }
 }
 
 function checkEnv() {
   const dotEnvPath = path.resolve(userHome, DEFAULT_CLI_HOME, ".env");
-  if (pathExists.sync(dotEnvPath)) {
+  if (pathExistsSync(dotEnvPath)) {
     dotEnv.config({
       path: dotEnvPath,
     });
@@ -96,11 +96,13 @@ function registerCommand() {
     .usage("<command> [option]")
     .version(pkg.version, "-v, --version")
     .option("-d, --debug", "是否开启调试模式", false)
-    .option("-tp, --targetPath", "本地开发使用", false);
+    .option("-tp, --targetPath [targetPath]", "本地开发使用monorepo路径");
 
   const featureCommand = registerFeatureCommand();
+  const initCommand = registerInitCommand();
 
   program.addCommand(featureCommand);
+  program.addCommand(initCommand);
 
   program.on("option:debug", () => {
     if (program.opts().debug) {
@@ -113,8 +115,11 @@ function registerCommand() {
   });
 
   program.on("option:targetPath", () => {
-    console.log("targetPath", process.cwd());
-    process.env.CLI_TARGET_PATH = process.cwd();
+    let targetPath = program.opts().targetPath;
+    if (typeof targetPath === "boolean") {
+      targetPath = process.cwd();
+    }
+    process.env.CLI_TARGET_PATH = targetPath;
   });
 
   program.on("command:*", (cmdObj) => {
@@ -146,6 +151,12 @@ function registerFeatureCommand() {
     .action(exec);
 
   return feature;
+}
+
+function registerInitCommand() {
+  const init = new Command("init");
+  init.description("初始化设定分支信息等").action(exec);
+  return init;
 }
 
 export default main;

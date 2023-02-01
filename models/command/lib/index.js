@@ -1,5 +1,9 @@
 import log from "@xy-flow/log";
+import fse from "fs-extra";
+import path from "path";
+import semver from "semver";
 
+const LOWEST_NODE_VERSION = "12.0.0";
 export default class Command {
   constructor(argv) {
     if (!argv) {
@@ -18,9 +22,19 @@ export default class Command {
       chain = chain.then(resolve);
       chain.catch((err) => {
         log.error("command", err.message);
-        reject(err);
+        log.verbose("command", err);
       });
     });
+  }
+
+  checkNodeVersion() {
+    const currentVersion = process.version;
+    const lowestVersion = LOWEST_NODE_VERSION;
+    if (!semver.gte(currentVersion, lowestVersion)) {
+      throw new Error(
+        `imooc-cli 需要安装 v${lowestVersion} 以上版本的 Node.js`
+      );
+    }
   }
 
   initArgs() {
@@ -30,7 +44,15 @@ export default class Command {
   }
 
   init() {
-    throw new Error("请实现init方法");
+    const homePath = process.env.CLI_HOME_PATH;
+    if (homePath) {
+      this.configPath = path.resolve(homePath, "config.json");
+      if (fse.existsSync(this.configPath)) {
+        this.allGitConfig = JSON.parse(fse.readFileSync(this.configPath));
+      } else {
+        this.allGitConfig = {};
+      }
+    }
   }
 
   exec() {
