@@ -1,6 +1,6 @@
 {
   "name": "@xy-flow/git",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "> TODO: description",
   "author": "guoxinyuan <guoxy@flatincbr.com>",
   "homepage": "https://github.com/XinYuanGuo/xy-flow#readme",
@@ -28,8 +28,8 @@
     "url": "https://github.com/XinYuanGuo/xy-flow/issues"
   },
   "dependencies": {
-    "@xy-flow/log": "^0.0.6",
-    "@xy-flow/utils": "^0.0.6",
+    "@xy-flow/log": "^0.0.7",
+    "@xy-flow/utils": "^0.0.7",
     "fs-extra": "^11.1.0",
     "simple-git": "^3.16.0"
   }
