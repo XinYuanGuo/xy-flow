@@ -1,6 +1,5 @@
 import Command from "@xy-flow/command";
 import log from "@xy-flow/log";
-import inquirer from "inquirer";
 
 class BugfixCommand extends Command {
   constructor(argv) {

@@ -117,6 +117,29 @@ class PublishCommand extends Command {
         await this.gitCls.git.pushTags();
         log.info("publish", `删除本地和远程仓库测试分支`);
         this.gitCls.delBranch(devBranch, mainBranch, true);
+        const localBranchArr = (await this.gitCls.git.branch(["-l"])).all;
+        const { delBranchArr } = await inquirer.prompt([
+          {
+            type: "checkbox",
+            name: delBranchArr,
+            message: "请选择要删除的本地分支",
+            choices: localBranchArr
+              .filter((l) => l.name !== mainBranch)
+              .map((l) => ({
+                name: l.name,
+              })),
+          },
+        ]);
+        if (delBranchArr && delBranchArr.length > 0) {
+          for (let i = 0; i < delBranchArr.length; i++) {
+            const b = delBranchArr[i];
+            await this.gitCls.delBranch(b, mainBranch);
+          }
+          log.success(
+            "publish",
+            `成功删除本地分支： ${delBranchArr.join(",")}`
+          );
+        }
       }
     } catch (error) {
       log.verbose("command exec error", error);
