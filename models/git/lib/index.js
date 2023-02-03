@@ -22,10 +22,10 @@ export default class Git {
     }
   }
 
-  handlePullRequest() {
+  handlePullRequest(branchA, branchB) {
     log.info("pull request", "打开git网页发起pull request");
-    log.verbose("pull request", this.remoteUrl);
-    openBrowser(`${this.remoteUrl}/compare/master...master`);
+    log.verbose("pull request", this.remoteUrl, branchA, branchB);
+    openBrowser(`${this.remoteUrl}/compare/${branchA}...${branchB}`);
   }
 
   async checkBranchNameIsExist(newBranchName) {
@@ -53,6 +53,19 @@ export default class Git {
         await this.git.fetch(["origin", `${branchName}:${branchName}`]);
       }
       log.success("pull branch", `拉取${branchName}成功`);
+    }
+  }
+
+  async delBranch(branchName, mainBranch, isDelOrigin = false) {
+    const currentBranch = await (await this.git.branch()).current;
+    if (currentBranch === branchName) {
+      await this.git.checkout(mainBranch);
+    }
+    await this.git.deleteLocalBranch(branchName);
+    log.success("git", `删除${branchName}分支成功`);
+    if (isDelOrigin) {
+      await this.git.push(["origin", branchName, "-d"]);
+      log.success("git", `删除远程${branchName}分支成功`);
     }
   }
 }

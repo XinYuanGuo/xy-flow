@@ -100,9 +100,11 @@ function registerCommand() {
 
   const featureCommand = registerFeatureCommand();
   const initCommand = registerInitCommand();
+  const publishCommand = registerPublishCommand();
 
-  program.addCommand(featureCommand);
   program.addCommand(initCommand);
+  program.addCommand(featureCommand);
+  program.addCommand(publishCommand);
 
   program.on("option:debug", () => {
     if (program.opts().debug) {
@@ -156,6 +158,12 @@ function registerFeatureCommand() {
 function registerInitCommand() {
   const init = new Command("init");
   init.description("初始化设定分支信息等").action(exec);
+  return init;
+}
+
+function registerPublishCommand() {
+  const init = new Command("publish");
+  init.description("合并测试分支到主干分支,并打tag").action(exec);
   return init;
 }
 

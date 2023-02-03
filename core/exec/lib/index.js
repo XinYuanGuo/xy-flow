@@ -6,6 +6,7 @@ const SETTINGS = {
   "xy-flow-feature-start": "@xy-flow/feature-start",
   "xy-flow-feature-finish": "@xy-flow/feature-finish",
   "xy-flow-init": "@xy-flow/init",
+  "xy-flow-publish": "@xy-flow/publish",
 };
 const CACHE_DIR = "dependencies";
 

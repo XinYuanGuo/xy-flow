@@ -26,11 +26,16 @@ export class InitCommand extends Command {
       ]);
       const allGitConfig = {
         ...this.allGitConfig,
-        [git.remoteUrl]: projectGitSettings,
+        [this.gitCls.remoteUrl]: projectGitSettings,
       };
-      await fse.outputFile(this.configPath, JSON.stringify(this.config, {}, 2));
+      await fse.outputFile(
+        this.configPath,
+        JSON.stringify(allGitConfig, {}, 2)
+      );
       log.success("init command", "初始化配置成功");
-      if (!(await this.gitCls.checkBranchNameIsExist(this.gitConfig))) {
+      if (
+        !(await this.gitCls.checkBranchNameIsExist(this.gitConfig.mainBranch))
+      ) {
         log.warn("init", "当前不存在主干分支, 请设置主干分支并推送到远端");
       }
     } catch (error) {
