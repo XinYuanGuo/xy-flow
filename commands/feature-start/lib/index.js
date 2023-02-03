@@ -12,7 +12,7 @@ export class FeatureStartCommand extends Command {
     try {
       await this.handleGitOperation(newBranchName);
     } catch (error) {
-      log.error("command feature start", error.message);
+      log.error("feature start", error.message);
       log.verbose("command exec", error);
     }
   }
@@ -21,7 +21,7 @@ export class FeatureStartCommand extends Command {
     if (!isBranchNameExist) {
       await this.gitCls.pullBranch(this.gitConfig.mainBranch);
     }
-    log.verbose("command feature start", `检查新分支名是否重复`);
+    log.verbose("feature start", `检查新分支名是否重复`);
     const isExist = await this.gitCls.checkBranchNameIsExist(newBranchName);
     if (isExist) {
       const { reInputNewBranchName } = await inquirer.prompt([
@@ -33,13 +33,13 @@ export class FeatureStartCommand extends Command {
       ]);
       return this.handleGitOperation(reInputNewBranchName, true);
     }
-    log.verbose("command feature start", "切出新分支");
+    log.verbose("feature start", "切出新分支");
     await this.gitCls.git.checkoutBranch(
       newBranchName,
       this.gitConfig.mainBranch
     );
     log.success(
-      "command feature start",
+      "feature start",
       `新建分支成功 ${this.gitConfig.mainBranch} => ${newBranchName}`
     );
   }

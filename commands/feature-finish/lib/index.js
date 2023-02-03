@@ -60,6 +60,6 @@ class FeatureFinishCommand extends Command {
 }
 
 export default function featureFinish(argv) {
-  log.verbose("command feature finish argv", argv);
+  log.verbose("cfeature finish argv", argv);
   return new FeatureFinishCommand(argv);
 }

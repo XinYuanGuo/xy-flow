@@ -50,14 +50,14 @@ export default class Git {
         await this.git.pull(["-r"]);
       } else {
         // 在同分支进行fetch
-        await this.git.fetch(["origin", `${branchName}:${branchName}`]);
+        await this.git.fetch(["origin", `${branchName}:${branchName}`, "-f"]);
       }
       log.success("pull branch", `拉取${branchName}成功`);
     }
   }
 
   async delBranch(branchName, mainBranch, isDelOrigin = false) {
-    const currentBranch = await (await this.git.branch()).current;
+    const currentBranch = (await this.git.branch()).current;
     if (currentBranch === branchName) {
       await this.git.checkout(mainBranch);
     }

@@ -98,12 +98,14 @@ function registerCommand() {
     .option("-d, --debug", "是否开启调试模式", false)
     .option("-tp, --targetPath [targetPath]", "本地开发使用monorepo路径");
 
-  const featureCommand = registerFeatureCommand();
   const initCommand = registerInitCommand();
+  const featureCommand = registerFeatureCommand();
+  const bugfixCommand = registerBugfixCommand();
   const publishCommand = registerPublishCommand();
 
   program.addCommand(initCommand);
   program.addCommand(featureCommand);
+  program.addCommand(bugfixCommand);
   program.addCommand(publishCommand);
 
   program.on("option:debug", () => {
@@ -164,6 +166,14 @@ function registerInitCommand() {
 function registerPublishCommand() {
   const init = new Command("publish");
   init.description("合并测试分支到主干分支,并打tag").action(exec);
+  return init;
+}
+
+function registerBugfixCommand() {
+  const init = new Command("bugfix");
+  init
+    .description("开发分支提测后修复bug, 可选择性提交合并入开发分支")
+    .action(exec);
   return init;
 }
 

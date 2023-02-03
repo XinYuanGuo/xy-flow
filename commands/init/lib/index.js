@@ -39,8 +39,8 @@ export class InitCommand extends Command {
         log.warn("init", "当前不存在主干分支, 请设置主干分支并推送到远端");
       }
     } catch (error) {
-      log.error("init command", error.message);
-      log.verbose("init command", error);
+      log.verbose("command exec error", error);
+      log.error("command exec error", error.message);
     }
   }
 }

@@ -7,6 +7,7 @@ const SETTINGS = {
   "xy-flow-feature-finish": "@xy-flow/feature-finish",
   "xy-flow-init": "@xy-flow/init",
   "xy-flow-publish": "@xy-flow/publish",
+  "xy-flow-bugfix": "@xy-flow/bugfix",
 };
 const CACHE_DIR = "dependencies";
 
