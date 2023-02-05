@@ -13,6 +13,11 @@ class PublishCommand extends Command {
       const { devBranch, mainBranch } = this.gitConfig;
       await this.gitCls.pullBranch(devBranch);
       await this.gitCls.pullBranch(mainBranch);
+      await this.gitCls.mergeAndCheckConflicted(devBranch, mainBranch, [
+        "--no-ff",
+      ]);
+      log.info("publish", `推送${devBranch}分支`);
+      await this.gitCls.git.push();
       const result = await this.gitCls.git.diffSummary([mainBranch, devBranch]);
       if (result.changed || result.deletions || result.insertions) {
         log.warn("publish", "主干分支应为保护分支, 请先在网页上进行pr");
@@ -116,17 +121,18 @@ class PublishCommand extends Command {
         log.info("publish", `推送tag`);
         await this.gitCls.git.pushTags();
         log.info("publish", `删除本地和远程仓库测试分支`);
-        this.gitCls.delBranch(devBranch, mainBranch, true);
+        await this.gitCls.delBranch(devBranch, mainBranch, true);
         const localBranchArr = (await this.gitCls.git.branch(["-l"])).all;
         const { delBranchArr } = await inquirer.prompt([
           {
             type: "checkbox",
-            name: delBranchArr,
-            message: "请选择要删除的本地分支",
+            name: "delBranchArr",
+            message: "请选择要删除的本地分支(默认不选择)",
             choices: localBranchArr
-              .filter((l) => l.name !== mainBranch)
+              .filter((l) => l !== mainBranch)
               .map((l) => ({
-                name: l.name,
+                name: l,
+                value: l,
               })),
           },
         ]);
@@ -135,10 +141,6 @@ class PublishCommand extends Command {
             const b = delBranchArr[i];
             await this.gitCls.delBranch(b, mainBranch);
           }
-          log.success(
-            "publish",
-            `成功删除本地分支： ${delBranchArr.join(",")}`
-          );
         }
       }
     } catch (error) {

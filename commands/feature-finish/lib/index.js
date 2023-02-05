@@ -13,14 +13,19 @@ class FeatureFinishCommand extends Command {
       const isExist = await this.gitCls.checkBranchNameIsExist(
         this.gitConfig.devBranch
       );
+      await this.gitCls.pullBranch(this.gitConfig.mainBranch);
       if (isExist) {
         await this.gitCls.pullBranch(this.gitConfig.devBranch);
+        await this.gitCls.mergeAndCheckConflicted(
+          this.gitConfig.devBranch,
+          this.gitConfig.mainBranch,
+          ["--no-ff"]
+        );
       } else {
         log.info(
           "feature finish",
           `检测到不存在${this.gitConfig.devBranch}分支`
         );
-        await this.gitCls.pullBranch(this.gitConfig.mainBranch);
         log.info(
           "feature finish",
           `创建${this.gitConfig.devBranch}分支: ${this.gitConfig.mainBranch} => ${this.gitConfig.devBranch}`
@@ -29,20 +34,11 @@ class FeatureFinishCommand extends Command {
           this.gitConfig.devBranch,
           this.gitConfig.mainBranch,
         ]);
-        log.success(
-          "feature finish",
-          `创建${this.gitConfig.devBranch}分支成功`
-        );
       }
-      log.info(
-        "feature finish",
-        `合并${this.gitConfig.devBranch}与${currentBranch}`
-      );
-      await this.gitCls.git.checkout([this.gitConfig.devBranch]);
-      await this.gitCls.git.merge([currentBranch, "--no-ff"]);
-      log.success(
-        "feature finish",
-        `合并${this.gitConfig.devBranch}与${currentBranch}成功`
+      await this.gitCls.mergeAndCheckConflicted(
+        this.gitConfig.devBranch,
+        currentBranch,
+        ["--no-ff"]
       );
       log.info("feature finish", `推送${this.gitConfig.devBranch}到远端`);
       await this.gitCls.git.push(
@@ -50,8 +46,8 @@ class FeatureFinishCommand extends Command {
         `${this.gitConfig.devBranch}:${this.gitConfig.devBranch}`,
         ["--set-upstream"]
       );
-      log.success("feature finish", `推送${this.gitConfig.devBranch}成功`);
       await this.gitCls.git.checkout(currentBranch);
+      log.success("feature finish", "执行feature finish成功");
     } catch (error) {
       log.verbose("command exec error", error);
       log.error("command exec error", error.message);
@@ -60,6 +56,6 @@ class FeatureFinishCommand extends Command {
 }
 
 export default function featureFinish(argv) {
-  log.verbose("cfeature finish argv", argv);
+  log.verbose("feature finish argv", argv);
   return new FeatureFinishCommand(argv);
 }

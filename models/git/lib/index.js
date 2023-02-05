@@ -45,14 +45,18 @@ export default class Git {
 
   async pullBranch(branchName) {
     const isExist = await this.checkBranchNameIsExist(branchName);
+
     if (isExist) {
+      log.info("git", `拉取${branchName}分支`);
       if ((await this.git.branch(["-a"])).current === branchName) {
         await this.git.pull(["-r"]);
       } else {
         // 在同分支进行fetch
         await this.git.fetch(["origin", `${branchName}:${branchName}`, "-f"]);
       }
-      log.success("pull branch", `拉取${branchName}成功`);
+      log.success("git", `拉取${branchName}成功`);
+    } else {
+      throw new Error(`pull branch ${branchName} 不存在！`);
     }
   }
 
@@ -66,6 +70,20 @@ export default class Git {
     if (isDelOrigin) {
       await this.git.push(["origin", branchName, "-d"]);
       log.success("git", `删除远程${branchName}分支成功`);
+    }
+  }
+
+  async mergeAndCheckConflicted(targetBranch, mergeBranch, options = []) {
+    await this.git.checkout([targetBranch]);
+    log.info("git", `合并${targetBranch}与${mergeBranch}`);
+    await this.git.merge([mergeBranch, ...options]);
+    const status = await this.git.status();
+    if (status.conflicted.length > 0) {
+      throw new Error(
+        "检测到出现冲突, 请解决冲突后自行提交, 或使用 git merge --abort 取消合并"
+      );
+    } else {
+      log.success("git", `合并${targetBranch}与${mergeBranch}成功`);
     }
   }
 }
