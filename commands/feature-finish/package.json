@@ -1,6 +1,6 @@
 {
   "name": "@xy-flow/feature-finish",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "> TODO: description",
   "author": "guoxinyuan <guoxy@flatincbr.com>",
   "homepage": "https://github.com/XinYuanGuo/xy-flow#readme",
@@ -28,9 +28,9 @@
     "url": "https://github.com/XinYuanGuo/xy-flow/issues"
   },
   "dependencies": {
-    "@xy-flow/command": "^0.0.11",
-    "@xy-flow/git": "^0.0.11",
-    "@xy-flow/log": "^0.0.11",
+    "@xy-flow/command": "^0.0.12",
+    "@xy-flow/git": "^0.0.12",
+    "@xy-flow/log": "^0.0.12",
     "fs-extra": "^11.1.0"
   }
 }
