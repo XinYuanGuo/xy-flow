@@ -21,7 +21,6 @@ export default async function exec() {
     const cmdName = getCommandName(cmdObj);
     const packageName = SETTINGS[cmdName];
     const packageVersion = "latest";
-
     if (!targetPath) {
       targetPath = path.resolve(homePath, CACHE_DIR);
       storePath = path.resolve(targetPath, "node_modules");

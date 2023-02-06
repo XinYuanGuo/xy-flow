@@ -34,7 +34,7 @@ export default class Package {
   async exists() {
     if (this.storePath) {
       await this.prepare();
-      return pathExistsSync(this.cacheFilePath);
+      return pathExistsSync(this.getRootPath());
     } else {
       return pathExistsSync(this.targetPath);
     }
