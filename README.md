@@ -4,7 +4,7 @@
 - xy-flow init
 初始化设定主干分支名、测试分支名
 
-- xy-flow feature start <branch-name> [-p <prefix>]
+- xy-flow feature start <branch-name> [-p prefix]
 拉取主分支，并从主分支切出开发分支，检测是否重名
 
 - xy-flow feature finish
