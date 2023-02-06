@@ -1,6 +1,6 @@
 {
   "name": "@xy-flow/core",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "> TODO: description",
   "author": "guoxinyuan <inky.gxy@gmail.com>",
   "homepage": "",
@@ -24,9 +24,9 @@
     "test": "node ./__tests__/core.test.js"
   },
   "dependencies": {
-    "@xy-flow/exec": "^0.0.10",
-    "@xy-flow/get-npm-info": "^0.0.10",
-    "@xy-flow/log": "^0.0.10",
+    "@xy-flow/exec": "^0.0.11",
+    "@xy-flow/get-npm-info": "^0.0.11",
+    "@xy-flow/log": "^0.0.11",
     "chalk": "^5.2.0",
     "commander": "^10.0.0",
     "dotenv": "^16.0.3",
