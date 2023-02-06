@@ -93,7 +93,7 @@ class PublishCommand extends Command {
           ]);
           newTag = updatedVersion;
         } else {
-          while (tag) {
+          while (!newTag) {
             const { firstTag } = await inquirer.prompt([
               {
                 type: "input",
