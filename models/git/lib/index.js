@@ -35,7 +35,7 @@ export default class Git {
       const branchName = branchList.all[i];
       if (
         branchName === newBranchName ||
-        branchName === `remotes/origin/${newBranchName}`
+        branchName === `origin/${newBranchName}`
       ) {
         return true;
       }

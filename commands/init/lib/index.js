@@ -34,7 +34,9 @@ export class InitCommand extends Command {
       );
       log.success("init command", "初始化配置成功");
       if (
-        !(await this.gitCls.checkBranchNameIsExist(this.gitConfig.mainBranch))
+        !(await this.gitCls.checkBranchNameIsExist(
+          projectGitSettings.mainBranch
+        ))
       ) {
         log.warn("init", "当前不存在主干分支, 请设置主干分支并推送到远端");
       }
